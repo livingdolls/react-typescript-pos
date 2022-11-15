@@ -1,4 +1,7 @@
 import { Box, styled, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { IKategori } from "../../../schema/IKategori";
+import { getAllKategori } from "../../../services/Kategori.service";
 import FormPage from "./FormPage";
 import TablePage from "./TabelPage";
 
@@ -9,7 +12,33 @@ const MainBox = styled(Box)({
 	gap: 20,
 });
 
+type TKategori = {
+	loading: boolean;
+	kategori: IKategori[];
+	error: null;
+};
+
 const Kategori: React.FC = () => {
+	const [kategoris, setKategoris] = useState<TKategori>({
+		loading: true,
+		kategori: [] as IKategori[],
+		error: null,
+	});
+
+	useEffect(() => {
+		setKategoris({ ...kategoris, loading: true });
+		getAllKategori()
+			.then((res) => res.data)
+			.then((data) => {
+				setKategoris({ ...kategoris, kategori: data, loading: false });
+			})
+			.catch((err) =>
+				setKategoris({ ...kategoris, error: err, loading: false })
+			);
+	}, []);
+
+	// console.log(kategoris);
+
 	return (
 		<MainBox>
 			<Box
@@ -38,7 +67,8 @@ const Kategori: React.FC = () => {
 				>
 					DAFTAR KATEGORI
 				</Typography>
-				<TablePage />
+
+				<TablePage kategoris={kategoris} />
 			</Box>
 		</MainBox>
 	);

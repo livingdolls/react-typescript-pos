@@ -15,7 +15,7 @@ const SubBox = styled(Box)({
 	backgroundColor: "#2196f3",
 });
 
-const Layout: React.FC<layout> = ({ ...props }) => {
+const Layout: React.FC<layout> = ({ children }) => {
 	return (
 		<Grid
 			container
@@ -41,7 +41,7 @@ const Layout: React.FC<layout> = ({ ...props }) => {
 					</SubBox>
 
 					<Box p={2} sx={{ backgroundColor: "#f2f7ff" }}>
-						{props.children}
+						{children}
 					</Box>
 				</MainBox>
 			</Grid>

@@ -1,8 +1,20 @@
 import { TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import MainTable from "../../../components/Table/Table";
 import TableHeads from "../../../components/Table/TableHead";
+import { IKategori } from "../../../schema/IKategori";
 
-const TablePage = () => {
+interface TKategori {
+	loading: boolean;
+	kategori: IKategori[];
+	error: null;
+}
+
+type IState = {
+	kategoris: TKategori;
+};
+
+const TablePage: React.FC<IState> = (props) => {
+	console.log(props);
 	return (
 		<MainTable>
 			<TableHead sx={{ backgroundColor: "#2196f3" }}>

@@ -67,6 +67,17 @@ const Sidebar: React.FC = () => {
 						</NavLink>
 					</ListItemButton>
 				</ListItem>
+
+				<ListItem>
+					<ListItemButton>
+						<NavLink
+							style={{ textDecoration: "none", color: "#263238" }}
+							to={"/dashboard/satuan"}
+						>
+							<Typography variant="h6">Master Satuan</Typography>
+						</NavLink>
+					</ListItemButton>
+				</ListItem>
 			</List>
 		</Box>
 	);

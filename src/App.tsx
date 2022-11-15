@@ -1,5 +1,6 @@
 import { createTheme, ThemeProvider } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
+import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Main from "./pages/Main";
 
@@ -21,6 +22,7 @@ function App() {
 			<Routes>
 				<Route path="/" element={<Main />} />
 				<Route path="/dashboard/*" element={<Dashboard />} />
+				<Route path="/auth/*" element={<Auth />} />
 			</Routes>
 		</ThemeProvider>
 	);
