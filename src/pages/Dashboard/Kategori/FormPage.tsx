@@ -1,13 +1,17 @@
 import { Box, Button, TextField } from "@mui/material";
-import { useState } from "react";
+import React, { useState } from "react";
+import { IForm } from "../../../schema/IKategori";
 
-type Kategori = {
-	nama: string;
-	keterangan: string;
+type formProps = {
+	tambah: (
+		form: IForm,
+		setForm: React.Dispatch<React.SetStateAction<IForm>>
+	) => void;
+	add: boolean;
 };
 
-const FormPage: React.FC = () => {
-	const [form, setForm] = useState<Kategori>({
+const FormPage: React.FC<formProps> = ({ tambah, add }) => {
+	const [form, setForm] = useState<IForm>({
 		nama: "",
 		keterangan: "",
 	});
@@ -19,7 +23,7 @@ const FormPage: React.FC = () => {
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		console.log(form);
+		tambah(form, setForm);
 	};
 
 	return (
@@ -49,9 +53,15 @@ const FormPage: React.FC = () => {
 					onChange={handleForm}
 				/>
 
-				<Button variant="contained" type="submit">
-					Tambah Kategori
-				</Button>
+				{add ? (
+					<Button disabled variant="contained" type="submit">
+						Loading...
+					</Button>
+				) : (
+					<Button variant="contained" type="submit">
+						Tambah Kategori
+					</Button>
+				)}
 			</Box>
 		</form>
 	);
