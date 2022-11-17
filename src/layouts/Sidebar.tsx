@@ -16,7 +16,13 @@ const SubBox = styled(Box)({
 
 const Sidebar: React.FC = () => {
 	return (
-		<Box sx={{ height: "90vh", backgroundColor: "#fff" }}>
+		<Box
+			sx={{
+				height: "100vh",
+				backgroundColor: "#fff",
+				boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+			}}
+		>
 			<SubBox>
 				<Typography
 					fontWeight={"bolder"}

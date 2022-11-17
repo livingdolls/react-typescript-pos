@@ -8,17 +8,12 @@ import {
 } from "@mui/material";
 import MainTable from "../../../components/Table/Table";
 import TableHeads from "../../../components/Table/TableHead";
-import { IKategori } from "../../../schema/IKategori";
-
-interface TKategori {
-	loading: boolean;
-	kategori: IKategori;
-	error: null;
-}
+import { IData, TKategori } from "../../../schema/IKategori";
 
 type IState = {
 	kategoris: TKategori;
 	delete: (id: string) => void;
+	edit: (id: IData) => void;
 };
 
 const TablePage: React.FC<IState> = (props) => {
@@ -52,8 +47,18 @@ const TablePage: React.FC<IState> = (props) => {
 									variant="contained"
 									color="error"
 									onClick={() => props.delete(d._id_kategori)}
+									sx={{ mr: 1 }}
 								>
 									DEL
+								</Button>
+
+								<Button
+									size="small"
+									variant="contained"
+									color="warning"
+									onClick={() => props.edit(d)}
+								>
+									EDIT
 								</Button>
 							</TableCell>
 						</TableRow>
