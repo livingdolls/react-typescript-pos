@@ -1,26 +1,24 @@
 import { Button, Box, TextField } from "@mui/material";
-import { IData } from "../../../schema/IKategori";
+import { TSatuan } from "../../../schema/ISatuan";
 
 type editProps = {
-	submitEdit: (e: React.FormEvent<HTMLFormElement>) => void;
-	data: IData;
-	setEdit: React.Dispatch<React.SetStateAction<IData>>;
+	patch: TSatuan;
+	setPatch: React.Dispatch<React.SetStateAction<TSatuan>>;
+	submit: (e: React.FormEvent<HTMLFormElement>) => void;
 };
 
-export const Edit: React.FC<editProps> = (props) => {
-	const { data, submitEdit, setEdit } = props;
-
+export const Edit: React.FC<editProps> = ({ setPatch, patch, submit }) => {
 	const handleForm = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
-		setEdit({ ...data, [name]: value });
+		setPatch({ ...patch, [name]: value });
 	};
 
 	return (
-		<form onSubmit={(e) => submitEdit(e)}>
+		<form onSubmit={(e) => submit(e)}>
 			<Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
 				<TextField
 					fullWidth
-					value={data._id_kategori}
+					value={patch._id_satuan}
 					label="id"
 					name="id"
 					disabled
@@ -28,7 +26,7 @@ export const Edit: React.FC<editProps> = (props) => {
 				/>
 
 				<TextField
-					value={data.nama}
+					value={patch.nama}
 					required
 					fullWidth
 					label="Nama Kategori"
@@ -37,7 +35,7 @@ export const Edit: React.FC<editProps> = (props) => {
 				/>
 
 				<TextField
-					value={data.keterangan}
+					value={patch.keterangan}
 					required
 					fullWidth
 					label="Keterangan"

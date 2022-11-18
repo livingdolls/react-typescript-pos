@@ -1,13 +1,16 @@
 import { Box, Button, TextField } from "@mui/material";
 import { useState } from "react";
+import { ASatuan } from "../../../schema/ISatuan";
 
-type Satuan = {
-	nama: string;
-	keterangan: string;
+type IForm = {
+	add: (
+		form: ASatuan,
+		setForm: React.Dispatch<React.SetStateAction<ASatuan>>
+	) => void;
 };
 
-const FormPage = () => {
-	const [form, setForm] = useState<Satuan>({
+const FormPage: React.FC<IForm> = ({ add }) => {
+	const [form, setForm] = useState<ASatuan>({
 		nama: "",
 		keterangan: "",
 	});
@@ -19,7 +22,7 @@ const FormPage = () => {
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
 		e.preventDefault();
-		console.log(form);
+		add(form, setForm);
 	};
 
 	return (

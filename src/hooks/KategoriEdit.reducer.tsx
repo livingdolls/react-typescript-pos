@@ -1,23 +1,21 @@
-import { IKategori } from "../schema/IKategori";
-
-export const initialKategori = {
-	loading: true,
-	kategori: {} as IKategori,
+export const editKategoriInitial = {
+	loading: false,
+	message: "",
 	error: "",
 };
 
 type action =
 	| { type: "FETCH_START" }
-	| { type: "FETCH_SUCCESS"; payload: IKategori }
+	| { type: "FETCH_SUCCESS"; payload: string }
 	| { type: "FETCH_ERROR"; payload: string };
 
-interface kategoris {
+export type TPkategori = {
 	loading: boolean;
-	kategori: IKategori;
+	message: string;
 	error: string;
-}
+};
 
-export const KategoriReducer = (state: kategoris, action: action) => {
+export const KategoriEditReducer = (state: TPkategori, action: action) => {
 	switch (action.type) {
 		case "FETCH_START":
 			return {
@@ -28,7 +26,7 @@ export const KategoriReducer = (state: kategoris, action: action) => {
 			return {
 				...state,
 				loading: false,
-				kategori: action.payload,
+				message: action.payload,
 			};
 		case "FETCH_ERROR":
 			return {

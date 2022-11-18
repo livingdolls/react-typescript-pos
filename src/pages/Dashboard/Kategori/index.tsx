@@ -6,11 +6,16 @@ import {
 	initialKategori,
 	KategoriReducer,
 } from "../../../hooks/Kategori.reducer";
+import {
+	editKategoriInitial,
+	KategoriEditReducer,
+} from "../../../hooks/KategoriEdit.reducer";
 import { IData, IForm } from "../../../schema/IKategori";
 import { IToast } from "../../../schema/Toast";
 import {
 	addKategori,
 	delKategori,
+	editKategori,
 	getAllKategori,
 } from "../../../services/Kategori.service";
 import { Edit } from "./Edit";
@@ -32,11 +37,20 @@ const Kategori: React.FC = () => {
 	});
 
 	const [state, dispatch] = useReducer(KategoriReducer, initialKategori);
+	const [stateEdit, dispatchEdit] = useReducer(
+		KategoriEditReducer,
+		editKategoriInitial
+	);
+
 	const [open, setOpen] = useState<boolean>(false);
-	const [edit, setEdit] = useState({});
+	const [edit, setEdit] = useState<IData>({
+		_id_kategori: "",
+		nama: "",
+		keterangan: "",
+	});
 	const [alert, setAlert] = useState<IToast>({
 		open: false,
-		severity: "info",
+		severity: "success",
 		msg: "",
 	});
 
@@ -63,9 +77,7 @@ const Kategori: React.FC = () => {
 			})
 			.catch((err) => console.log(err));
 
-		setTimeout(() => {
-			setAlert({ ...alert, open: false });
-		}, 2000);
+		handleAlert();
 	};
 
 	const handleAdd = (
@@ -83,14 +95,23 @@ const Kategori: React.FC = () => {
 				setAlert({ severity: "error", open: true, msg: err });
 			});
 
-		setTimeout(() => {
-			setAlert({ ...alert, open: false });
-		}, 2000);
+		handleAlert();
 	};
 
 	const submitEdit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		console.log("dadw");
+		dispatchEdit({ type: "FETCH_START" });
+		editKategori(edit)
+			.then((d) => {
+				dispatchEdit({ type: "FETCH_SUCCESS", payload: d.msg });
+				setAlert({ severity: "success", open: true, msg: d.msg });
+				setAdd({ ...add, loading: false });
+			})
+			.catch((err) =>
+				dispatchEdit({ type: "FETCH_ERROR", payload: err.message })
+			);
+
+		handleAlert();
 	};
 
 	const handleEdit = (id: IData) => {
@@ -100,6 +121,12 @@ const Kategori: React.FC = () => {
 
 	const handleModal = () => {
 		setOpen(false);
+	};
+
+	const handleAlert = () => {
+		setTimeout(() => {
+			setAlert({ ...alert, open: false });
+		}, 2000);
 	};
 
 	return (
