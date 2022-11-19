@@ -2,16 +2,17 @@ import {
 	Box,
 	List,
 	ListItem,
+	ListItemAvatar,
 	ListItemButton,
 	ListItemText,
 	styled,
 	Typography,
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
+import logo from "../assets/logo.png";
 
 const SubBox = styled(Box)({
-	padding: "15px",
-	backgroundColor: "#2196f3",
+	height: "70px",
 });
 
 const Sidebar: React.FC = () => {
@@ -24,19 +25,33 @@ const Sidebar: React.FC = () => {
 			}}
 		>
 			<SubBox>
-				<Typography
-					fontWeight={"bolder"}
-					variant="h6"
-					sx={{ color: "#fff" }}
-				>
-					Main Menu
-				</Typography>
+				<List>
+					<ListItem>
+						<ListItemAvatar>
+							<img
+								src={logo}
+								alt={logo}
+								width="50px"
+								height="50px"
+							/>
+						</ListItemAvatar>
+						<ListItemText>
+							<Typography variant="h6" color="secondary">
+								STORE
+							</Typography>
+						</ListItemText>
+					</ListItem>
+				</List>
 			</SubBox>
+
 			<List>
 				<ListItem>
 					<ListItemButton>
 						<NavLink
-							style={{ textDecoration: "none", color: "#263238" }}
+							style={{
+								textDecoration: "none",
+								color: "#263238",
+							}}
 							to={"/dashboard/"}
 						>
 							<ListItemText>

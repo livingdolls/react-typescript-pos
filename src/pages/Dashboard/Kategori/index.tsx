@@ -27,6 +27,8 @@ const MainBox = styled(Box)({
 	flexDirection: "row",
 	alignItems: "baseline",
 	gap: 20,
+	maxHeight: "90vh",
+	overflow: "auto",
 });
 
 const Kategori: React.FC = () => {
@@ -144,7 +146,8 @@ const Kategori: React.FC = () => {
 				<Typography
 					variant="h6"
 					fontWeight={400}
-					sx={{ color: "#2196f3", marginBottom: 1 }}
+					color="secondary"
+					mb={1}
 				>
 					TAMBAH KATEGORI
 				</Typography>
@@ -162,7 +165,8 @@ const Kategori: React.FC = () => {
 				<Typography
 					variant="h6"
 					fontWeight={400}
-					sx={{ color: "#2196f3", marginBottom: 1 }}
+					color="secondary"
+					mb={1}
 				>
 					DAFTAR KATEGORI
 				</Typography>

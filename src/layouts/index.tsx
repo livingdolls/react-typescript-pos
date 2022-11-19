@@ -11,8 +11,10 @@ const MainBox = styled(Box)({
 });
 
 const SubBox = styled(Box)({
-	padding: "15px",
-	backgroundColor: "#2196f3",
+	height: "70px",
+	display: "flex",
+	alignItems: "center",
+	marginLeft: "30px",
 });
 
 const Layout: React.FC<layout> = ({ children }) => {
@@ -21,7 +23,6 @@ const Layout: React.FC<layout> = ({ children }) => {
 			container
 			direction={"row"}
 			spacing={2}
-			p={1}
 			sx={{ backgroundColor: "#f2f7ff" }}
 		>
 			<Grid item xs={2}>
@@ -32,11 +33,11 @@ const Layout: React.FC<layout> = ({ children }) => {
 				<MainBox>
 					<SubBox>
 						<Typography
-							fontWeight={"bolder"}
-							variant="h6"
-							sx={{ color: "#fff" }}
+							fontWeight="bold"
+							variant="h5"
+							color="secondary"
 						>
-							Admin Dashboard
+							ADMIN DASHBOARD
 						</Typography>
 					</SubBox>
 

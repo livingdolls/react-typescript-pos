@@ -116,7 +116,8 @@ const Satuan = () => {
 				}}
 			>
 				<Typography
-					sx={{ color: "#2196f3", marginBottom: 1 }}
+					color="secondary"
+					mb={1}
 					variant="h6"
 					fontWeight={400}
 				>
@@ -134,7 +135,8 @@ const Satuan = () => {
 				}}
 			>
 				<Typography
-					sx={{ color: "#2196f3", marginBottom: 1 }}
+					color="secondary"
+					mb={1}
 					variant="h6"
 					fontWeight={400}
 				>

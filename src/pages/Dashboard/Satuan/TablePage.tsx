@@ -1,4 +1,5 @@
 import {
+	Box,
 	Button,
 	LinearProgress,
 	TableBody,
@@ -24,46 +25,48 @@ const TablePage: React.FC<propsSatuan> = ({ satuan, del, edit }) => {
 	}
 
 	return (
-		<MainTable>
-			<TableHead sx={{ backgroundColor: "#2196f3" }}>
-				<TableRow>
-					<TableHeads>No</TableHeads>
-					<TableHeads>Nama</TableHeads>
-					<TableHeads>Keterangan</TableHeads>
-					<TableHeads>Aksi</TableHeads>
-				</TableRow>
-			</TableHead>
+		<Box sx={{ maxHeight: "70vh", overflow: "auto" }}>
+			<MainTable>
+				<TableHead sx={{ backgroundColor: "#2196f3" }}>
+					<TableRow>
+						<TableHeads>No</TableHeads>
+						<TableHeads>Nama</TableHeads>
+						<TableHeads>Keterangan</TableHeads>
+						<TableHeads>Aksi</TableHeads>
+					</TableRow>
+				</TableHead>
 
-			<TableBody>
-				{data.data.map((s, i) => {
-					return (
-						<TableRow key={s._id_satuan}>
-							<TableCell>{i + 1}</TableCell>
-							<TableCell>{s.nama}</TableCell>
-							<TableCell>{s.keterangan}</TableCell>
-							<TableCell>
-								<Button
-									color="error"
-									size="small"
-									variant="contained"
-									onClick={() => del(s._id_satuan)}
-								>
-									Del
-								</Button>{" "}
-								<Button
-									color="warning"
-									size="small"
-									variant="contained"
-									onClick={() => edit(s)}
-								>
-									Edit
-								</Button>
-							</TableCell>
-						</TableRow>
-					);
-				})}
-			</TableBody>
-		</MainTable>
+				<TableBody>
+					{data.data.map((s, i) => {
+						return (
+							<TableRow key={s._id_satuan}>
+								<TableCell>{i + 1}</TableCell>
+								<TableCell>{s.nama}</TableCell>
+								<TableCell>{s.keterangan}</TableCell>
+								<TableCell>
+									<Button
+										color="error"
+										size="small"
+										variant="contained"
+										onClick={() => del(s._id_satuan)}
+									>
+										Del
+									</Button>{" "}
+									<Button
+										color="warning"
+										size="small"
+										variant="contained"
+										onClick={() => edit(s)}
+									>
+										Edit
+									</Button>
+								</TableCell>
+							</TableRow>
+						);
+					})}
+				</TableBody>
+			</MainTable>
+		</Box>
 	);
 };
 

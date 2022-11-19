@@ -9,6 +9,9 @@ import {
 	TextField,
 } from "@mui/material";
 import React, { useState } from "react";
+import { TBarang } from "../../../schema/IBarng";
+import { IData } from "../../../schema/IKategori";
+import { ISatuan, TRSatuan, TSatuan } from "../../../schema/ISatuan";
 
 type Barang = {
 	nama: string;
@@ -18,13 +21,24 @@ type Barang = {
 	kategori: string;
 };
 
-const FormPage = () => {
-	const [formData, setFormData] = useState<Barang>({
+type propsForm = {
+	satuan: TSatuan[];
+	kategori: IData[];
+	add: (
+		form: Omit<TBarang, "_id_barang">,
+		setForm: React.Dispatch<
+			React.SetStateAction<Omit<TBarang, "_id_barang">>
+		>
+	) => void;
+};
+
+const FormPage: React.FC<propsForm> = ({ satuan, kategori, add }) => {
+	const [formData, setFormData] = useState<Omit<TBarang, "_id_barang">>({
 		nama: "",
 		harga: 0,
 		qty: 0,
-		satuan: "",
-		kategori: "",
+		_id_satuan: "",
+		_id_kategori: "",
 	});
 
 	const handleForm = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,8 +53,7 @@ const FormPage = () => {
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
 		e.preventDefault();
-
-		console.log(formData);
+		add(formData, setFormData);
 	};
 
 	return (
@@ -85,14 +98,21 @@ const FormPage = () => {
 					<InputLabel id="satuan">Satuan</InputLabel>
 					<Select
 						label="Months"
-						name="satuan"
+						name="_id_satuan"
 						id="satuan"
-						value={formData.satuan}
+						value={formData._id_satuan}
 						onChange={handleSelect}
 					>
-						<MenuItem value={"1"}>PCS</MenuItem>
-						<MenuItem value={"2"}>BOX</MenuItem>
-						<MenuItem value={"3"}>Plastik</MenuItem>
+						{satuan?.map((s) => {
+							return (
+								<MenuItem
+									key={s._id_satuan}
+									value={s._id_satuan}
+								>
+									{s.nama}
+								</MenuItem>
+							);
+						})}
 					</Select>
 				</FormControl>
 
@@ -100,14 +120,21 @@ const FormPage = () => {
 					<InputLabel id="kategori">Kategori</InputLabel>
 					<Select
 						label="kategori"
-						name="kategori"
+						name="_id_kategori"
 						id="kategori"
-						value={formData.kategori}
+						value={formData._id_kategori}
 						onChange={handleSelect}
 					>
-						<MenuItem value={"1"}>Makanan</MenuItem>
-						<MenuItem value={"2"}>Kebutuhan Rumah Tangga</MenuItem>
-						<MenuItem value={"3"}>Pakaian</MenuItem>
+						{kategori?.map((k) => {
+							return (
+								<MenuItem
+									key={k._id_kategori}
+									value={k._id_kategori}
+								>
+									{k.nama}
+								</MenuItem>
+							);
+						})}
 					</Select>
 				</FormControl>
 
