@@ -20,3 +20,36 @@ export const postBarangService = async (data: Omit<TBarang, "_id_barang">) => {
 		throw new Error(error);
 	}
 };
+
+export const getBarangReal = async (id: string) => {
+	try {
+		const res = await client
+			.get(`${BASE_URL}/barang/${id}`)
+			.then((res) => res.data);
+		return res;
+	} catch (error: any) {
+		throw new Error(error);
+	}
+};
+
+export const deleteBarangService = async (id: string) => {
+	try {
+		const del = await client
+			.delete(`${BASE_URL}/${id}`)
+			.then((res) => res.data);
+		return del;
+	} catch (error: any) {
+		throw new Error(error);
+	}
+};
+
+export const patchBarangService = async (data: TBarang) => {
+	try {
+		const res = await client
+			.put(`${BASE_URL}/${data._id_barang}`, data)
+			.then((res) => res.data);
+		return res;
+	} catch (error: any) {
+		throw new Error(error);
+	}
+};

@@ -9,13 +9,15 @@ import {
 } from "@mui/material";
 import MainTable from "../../../components/Table/Table";
 import TableHeads from "../../../components/Table/TableHead";
-import { IBarang } from "../../../schema/IBarng";
+import { IBarang, TBarang } from "../../../schema/IBarng";
 
 type propsBarang = {
 	data: IBarang;
+	del: (id: string) => void;
+	edit: (data: string) => void;
 };
 
-const TablePage: React.FC<propsBarang> = ({ data }) => {
+const TablePage: React.FC<propsBarang> = ({ data, del, edit }) => {
 	const barang = data.barang;
 	if (data.loading) {
 		return (
@@ -56,8 +58,17 @@ const TablePage: React.FC<propsBarang> = ({ data }) => {
 									color="error"
 									size="small"
 									variant="contained"
+									onClick={() => del(d._id_barang)}
 								>
 									Del
+								</Button>{" "}
+								<Button
+									color="warning"
+									size="small"
+									variant="contained"
+									onClick={() => edit(d._id_barang)}
+								>
+									Edit
 								</Button>
 							</TableCell>
 						</TableRow>

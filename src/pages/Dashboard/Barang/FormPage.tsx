@@ -11,7 +11,7 @@ import {
 import React, { useState } from "react";
 import { TBarang } from "../../../schema/IBarng";
 import { IData } from "../../../schema/IKategori";
-import { ISatuan, TRSatuan, TSatuan } from "../../../schema/ISatuan";
+import { TSatuan } from "../../../schema/ISatuan";
 
 type Barang = {
 	nama: string;
@@ -24,6 +24,7 @@ type Barang = {
 type propsForm = {
 	satuan: TSatuan[];
 	kategori: IData[];
+	load: boolean;
 	add: (
 		form: Omit<TBarang, "_id_barang">,
 		setForm: React.Dispatch<
@@ -32,7 +33,7 @@ type propsForm = {
 	) => void;
 };
 
-const FormPage: React.FC<propsForm> = ({ satuan, kategori, add }) => {
+const FormPage: React.FC<propsForm> = ({ satuan, kategori, add, load }) => {
 	const [formData, setFormData] = useState<Omit<TBarang, "_id_barang">>({
 		nama: "",
 		harga: 0,
@@ -138,9 +139,15 @@ const FormPage: React.FC<propsForm> = ({ satuan, kategori, add }) => {
 					</Select>
 				</FormControl>
 
-				<Button variant="contained" type="submit">
-					Tambah Data
-				</Button>
+				{load ? (
+					<Button disabled variant="contained" type="submit">
+						Loading...
+					</Button>
+				) : (
+					<Button variant="contained" type="submit">
+						Tambah Data
+					</Button>
+				)}
 			</Box>
 		</form>
 	);

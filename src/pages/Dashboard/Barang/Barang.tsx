@@ -1,7 +1,12 @@
 import { Box, styled, Typography } from "@mui/material";
 import { useEffect, useReducer, useState } from "react";
+import MainModal from "../../../components/Modal";
 import { Toast } from "../../../components/Toast";
 import { AlertReducer, initilaAlert } from "../../../hooks/alert.reducer";
+import {
+	initialPatchBarang,
+	patchBarangReducer,
+} from "../../../hooks/editBarang.reducer";
 import { barangReducer, initialbarang } from "../../../hooks/getBarang.reducer";
 import { initialGS, SatuanReducer } from "../../../hooks/getSatuan.reducer";
 import {
@@ -9,13 +14,17 @@ import {
 	KategoriReducer,
 } from "../../../hooks/Kategori.reducer";
 import { initialPB, postRBarang } from "../../../hooks/postBarang.reducer";
-import { TBarang } from "../../../schema/IBarng";
+import { IBarang, TBarang } from "../../../schema/IBarng";
 import {
+	deleteBarangService,
 	getAllBarang,
+	getBarangReal,
+	patchBarangService,
 	postBarangService,
 } from "../../../services/Barang.service";
 import { getAllKategori } from "../../../services/Kategori.service";
 import { getAllSatuan } from "../../../services/Satuan.service";
+import Edit from "./Edit";
 import FormPage from "./FormPage";
 import TablePage from "./TablePage";
 
@@ -28,6 +37,7 @@ const MainBox = styled(Box)({
 
 const Barang = () => {
 	const [refresh, setRefresh] = useState<boolean>(false);
+	const [open, setOpen] = useState<boolean>(false);
 	const [stateGet, dispatchGet] = useReducer(barangReducer, initialbarang);
 	const [satuan, setSatuan] = useReducer(SatuanReducer, initialGS);
 	const [kategori, setKategori] = useReducer(
@@ -37,6 +47,10 @@ const Barang = () => {
 
 	const [statePost, dispatchPost] = useReducer(postRBarang, initialPB);
 	const [alert, setAlert] = useReducer(AlertReducer, initilaAlert);
+	const [statePatch, dispatchPatch] = useReducer(
+		patchBarangReducer,
+		initialPatchBarang
+	);
 
 	useEffect(() => {
 		dispatchGet({ type: "FETCH_START" });
@@ -103,10 +117,65 @@ const Barang = () => {
 		handleAlert();
 	};
 
+	const handleDeleteBarang = (id: string) => {
+		deleteBarangService(id)
+			.then((d) => {
+				setAlert({ type: "OPEN", msg: d.message });
+				setRefresh(!refresh);
+			})
+			.catch((err) => {
+				setAlert({
+					type: "OPEN",
+					payload: err.message,
+					severity: "error",
+				});
+			});
+
+		handleAlert();
+	};
+
+	const handleEditBarang = async (data: string) => {
+		await getBarangReal(data).then((d) => {
+			const oneData = d.data[0];
+			dispatchPatch({ type: "PATCH_INITIAL", payload: oneData });
+		});
+		setOpen(true);
+	};
+
+	const handleForm = (name: string, value: string) => {
+		dispatchPatch({ type: "PATCH_CHANGE", field: name, value: value });
+	};
+
+	const patchBarang = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		dispatchPatch({ type: "PATCH_START" });
+		const { _id_barang, nama, _id_satuan, _id_kategori } =
+			statePatch.barang;
+		const harga = Number(statePatch.barang.harga);
+		const qty = Number(statePatch.barang.qty);
+
+		const data = { _id_barang, nama, harga, qty, _id_satuan, _id_kategori };
+		await patchBarangService(data)
+			.then((d) => {
+				dispatchPatch({ type: "PATCH_SUCCESS", payload: d.message });
+				setAlert({ type: "OPEN", msg: d.message });
+				setRefresh(!refresh);
+			})
+			.catch((err) => {
+				dispatchPatch({ type: "PATCH_ERROR", payload: err.message });
+			});
+
+		handleAlert();
+	};
+
 	const handleAlert = () => {
 		setTimeout(() => {
 			setAlert({ type: "CLOSE" });
 		}, 2000);
+	};
+
+	const handleModal = () => {
+		setOpen(false);
 	};
 
 	return (
@@ -134,6 +203,7 @@ const Barang = () => {
 					satuan={satuan.satuan.data}
 					kategori={kategori.kategori.data}
 					add={postBarang}
+					load={statePost.loading}
 				/>
 			</Box>
 
@@ -154,8 +224,22 @@ const Barang = () => {
 					DAFTAR BARANG
 				</Typography>
 
-				<TablePage data={stateGet} />
+				<TablePage
+					data={stateGet}
+					del={handleDeleteBarang}
+					edit={handleEditBarang}
+				/>
 			</Box>
+
+			<MainModal open={open} handleModal={handleModal}>
+				<Edit
+					satuan={satuan.satuan.data}
+					kategori={kategori.kategori.data}
+					data={statePatch.barang}
+					ubah={handleForm}
+					kirim={patchBarang}
+				/>
+			</MainModal>
 		</MainBox>
 	);
 };
