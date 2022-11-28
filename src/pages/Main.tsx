@@ -1,5 +1,7 @@
+import Layout from "./Transaksi/Layout";
+
 const Main = () => {
-	return <>Main Transaksi</>;
+	return <Layout />;
 };
 
 export default Main;
