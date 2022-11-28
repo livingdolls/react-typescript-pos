@@ -1,4 +1,5 @@
 import {
+	Avatar,
 	Box,
 	List,
 	ListItem,
@@ -13,6 +14,15 @@ import logo from "../assets/logo.png";
 
 const SubBox = styled(Box)({
 	height: "70px",
+});
+
+const BoxProfil = styled(Box)({
+	height: "150px",
+	display: "flex",
+	alignItems: "center",
+	flexDirection: "column",
+	justifyContent: "center",
+	gap: 15,
 });
 
 const Sidebar: React.FC = () => {
@@ -43,6 +53,17 @@ const Sidebar: React.FC = () => {
 					</ListItem>
 				</List>
 			</SubBox>
+
+			<BoxProfil>
+				<Avatar sx={{ height: "70px", width: "70px" }} />
+				<Typography variant="h6">Yurina Hirate</Typography>
+				<Typography
+					variant="button"
+					sx={{ color: "#3e3e3e", marginTop: -2 }}
+				>
+					Super Admin
+				</Typography>
+			</BoxProfil>
 
 			<List>
 				<ListItem>
