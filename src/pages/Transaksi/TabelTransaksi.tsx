@@ -18,14 +18,12 @@ const BoxTransaksi = styled(Box)({
 
 type propsTabel = {
 	transaksi: TTransaksi[];
-	setTransaksi: React.Dispatch<React.SetStateAction<TTransaksi[]>>;
+	del: (id: string) => void;
 };
 
-const TabelTransaksi: React.FC<propsTabel> = ({ transaksi, setTransaksi }) => {
-	const handleDelete = (id: any) => {
-		const data = transaksi.filter((e: any) => e.id !== id);
-
-		setTransaksi(data);
+const TabelTransaksi: React.FC<propsTabel> = ({ transaksi, del }) => {
+	const handleDelete = (id: string) => {
+		del(id);
 	};
 	return (
 		<BoxTransaksi>
@@ -42,9 +40,9 @@ const TabelTransaksi: React.FC<propsTabel> = ({ transaksi, setTransaksi }) => {
 				</TableHead>
 
 				<TableBody>
-					{transaksi.map((e: any, i: number) => {
+					{transaksi.map((e: TTransaksi, i: number) => {
 						return (
-							<TableRow key={i}>
+							<TableRow key={e.id}>
 								<TableCell>{i + 1}</TableCell>
 								<TableCell>Kopi Luwak</TableCell>
 								<TableCell>2000</TableCell>

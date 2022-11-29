@@ -1,12 +1,14 @@
 import { Box, styled } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useReducer, useState } from "react";
+import { initialTransaksi, transaksiCart } from "../../hooks/Transaksi.reducer";
+import { TCart, TTransaksi } from "../../schema/Transaksi.schema";
+import { getAllBarang } from "../../services/Barang.service";
 import Barang from "./Barang";
 import Invoice from "./Invoice";
+import Navbar from "./Navbar";
 import TabelTransaksi from "./TabelTransaksi";
 
 const MainBox = styled(Box)({
-	backgroundColor: "#f2f7ff",
-	height: "100vh",
 	display: "flex",
 	justifyContent: "flex-start",
 	alignItems: "baseline",
@@ -14,29 +16,75 @@ const MainBox = styled(Box)({
 	gap: 20,
 });
 
+const BoxBody = styled(Box)({
+	backgroundColor: "#f2f7ff",
+	height: "100vh",
+});
+
 const Layout = () => {
-	const [transaksi, setTransaksi] = useState([
-		{ id: "1", nama: "luwak", harga: 2000, qty: 2, total: 4000 },
-		{ id: "2", nama: "Kopi luwak", harga: 2000, qty: 2, total: 2000 },
-	]);
+	const [stateCart, dispatchCart] = useReducer(
+		transaksiCart,
+		initialTransaksi
+	);
+
+	useEffect(() => {
+		getAllBarang().then((d) => {
+			dispatchCart({ type: "FETCH_BARANG", payload: d.data });
+		});
+	}, []);
+
+	const addCart = (barang: TCart) => {
+		const data = {
+			id: barang._id_barang,
+			nama: barang.nama,
+			harga: barang.harga,
+			qty: 1,
+			total: 1000,
+		};
+
+		const find = stateCart.cart.findIndex((e: any) => e.id === data.id);
+
+		if (find !== -1) {
+			const md = stateCart.cart[find];
+			const newQty = { ...md, qty: md.qty + 1 };
+			const newTransaksi = [...stateCart.cart];
+			newTransaksi[find] = newQty;
+
+			dispatchCart({ type: "ADD_CART", payload: newTransaksi });
+		} else {
+			const newD = [...stateCart.cart, data];
+
+			dispatchCart({ type: "ADD_CART", payload: newD });
+		}
+	};
+
+	const removeCart = (id: string) => {
+		const data = stateCart.cart.filter((e: any) => e.id !== id);
+
+		dispatchCart({ type: "REMOVE_CART", payload: data });
+	};
 
 	return (
-		<MainBox>
-			<Box sx={{ width: "30%", backgroundColor: "#fff" }}>
-				<Barang transaksi={transaksi} setTransaksi={setTransaksi} />
-			</Box>
+		<BoxBody>
+			<Navbar />
 
-			<Box sx={{ width: "50%", backgroundColor: "#fff" }}>
-				<TabelTransaksi
-					transaksi={transaksi}
-					setTransaksi={setTransaksi}
-				/>
-			</Box>
+			<MainBox>
+				<Box sx={{ width: "30%", backgroundColor: "#fff" }}>
+					<Barang data={stateCart.barang} add={addCart} />
+				</Box>
 
-			<Box sx={{ width: "20%", backgroundColor: "#fff" }}>
-				<Invoice />
-			</Box>
-		</MainBox>
+				<Box sx={{ width: "50%", backgroundColor: "#fff" }}>
+					<TabelTransaksi
+						transaksi={stateCart.cart}
+						del={removeCart}
+					/>
+				</Box>
+
+				<Box sx={{ width: "20%", backgroundColor: "#fff" }}>
+					<Invoice />
+				</Box>
+			</MainBox>
+		</BoxBody>
 	);
 };
 
