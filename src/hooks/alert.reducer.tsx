@@ -1,12 +1,6 @@
-import { ISatuan } from "../schema/ISatuan";
-
-type action = { type: "OPEN"; msg: string; s: string } | { type: "CLOSE" };
-
-// export interface satuan {
-// 	loading: boolean;
-// 	satuan: ISatuan;
-// 	error: string;
-// }
+type action =
+	| { type: "OPEN"; msg: string; severity?: string }
+	| { type: "CLOSE" };
 
 export const initilaAlert = {
 	severity: "success",
@@ -14,7 +8,13 @@ export const initilaAlert = {
 	msg: "",
 };
 
-export const AlertReducer = (state: any, action: any) => {
+export type IToasts = {
+	open: boolean;
+	severity: string;
+	msg: string;
+};
+
+export const AlertReducer = (state: any, action: action) => {
 	switch (action.type) {
 		case "OPEN":
 			return {

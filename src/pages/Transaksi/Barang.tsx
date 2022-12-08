@@ -24,7 +24,7 @@ const Barang: React.FC<propsBarang> = ({ data, add }) => {
 			nama: b.nama,
 			harga: b.harga,
 			qty: 1,
-			total: 1000,
+			sub_total: b.harga,
 		};
 		add(cart);
 	};

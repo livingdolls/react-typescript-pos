@@ -1,14 +1,23 @@
+import { TBarang } from "../schema/IBarng";
+import { TCart } from "../schema/Transaksi.schema";
+
 export const initialTransaksi = {
-	barang: [],
-	cart: [],
+	barang: [] as TBarang[],
+	cart: [] as TCart[],
 };
 
-// type action =
-// 	| { type: "FETCH_START" }
-// 	| { type: "FETCH_SUCCESS"; payload:  }
-// 	| { type: "FETCH_ERROR"; payload: string };
+type action =
+	| { type: "FETCH_BARANG"; payload: TBarang[] }
+	| { type: "ADD_CART"; payload: TCart[] }
+	| { type: "REMOVE_CART"; payload: TCart[] }
+	| { type: "COMPLETED_CART" };
 
-export const transaksiCart = (state: any, action: any) => {
+type initialStateType = {
+	barang: TBarang[];
+	cart: TCart[];
+};
+
+export const transaksiCart = (state: initialStateType, action: action) => {
 	switch (action.type) {
 		case "FETCH_BARANG":
 			return {
@@ -24,6 +33,11 @@ export const transaksiCart = (state: any, action: any) => {
 			return {
 				...state,
 				cart: action.payload,
+			};
+		case "COMPLETED_CART":
+			return {
+				...state,
+				cart: [],
 			};
 		default:
 			return state;

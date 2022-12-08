@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import MainTable from "../../components/Table/Table";
 import TableHeads from "../../components/Table/TableHead";
-import { TTransaksi } from "../../schema/Transaksi.schema";
+import { TCart, TTransaksi } from "../../schema/Transaksi.schema";
 
 const BoxTransaksi = styled(Box)({
 	borderRadius: 1,
@@ -17,7 +17,7 @@ const BoxTransaksi = styled(Box)({
 });
 
 type propsTabel = {
-	transaksi: TTransaksi[];
+	transaksi: TCart[];
 	del: (id: string) => void;
 };
 
@@ -40,20 +40,22 @@ const TabelTransaksi: React.FC<propsTabel> = ({ transaksi, del }) => {
 				</TableHead>
 
 				<TableBody>
-					{transaksi.map((e: TTransaksi, i: number) => {
+					{transaksi.map((e: TCart, i: number) => {
 						return (
-							<TableRow key={e.id}>
+							<TableRow key={e._id_barang}>
 								<TableCell>{i + 1}</TableCell>
-								<TableCell>Kopi Luwak</TableCell>
-								<TableCell>2000</TableCell>
+								<TableCell>{e.nama}</TableCell>
+								<TableCell>{e.harga}</TableCell>
 								<TableCell>{e.qty}</TableCell>
-								<TableCell>4000</TableCell>
+								<TableCell>{e.harga * e.qty}</TableCell>
 								<TableCell>
 									<Button
 										size="small"
 										variant="contained"
 										color="error"
-										onClick={() => handleDelete(e.id)}
+										onClick={() =>
+											handleDelete(e._id_barang)
+										}
 									>
 										Del
 									</Button>

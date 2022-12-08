@@ -126,7 +126,7 @@ const Barang = () => {
 			.catch((err) => {
 				setAlert({
 					type: "OPEN",
-					payload: err.message,
+					msg: err.message,
 					severity: "error",
 				});
 			});
