@@ -1,6 +1,9 @@
 import { Box, Button, styled, TextField, Typography } from "@mui/material";
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useReducer, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { AlertReducer, initilaAlert } from "../../hooks/alert.reducer";
+import { TRegister } from "../../schema/User.schema";
+import { RegistrasiUser } from "../../services/Auth.service";
 
 const MainBox = styled(Box)({
 	backgroundColor: "#fff",
@@ -10,18 +13,18 @@ const MainBox = styled(Box)({
 	boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
 });
 
-type Register = {
-	nama: string;
-	email: string;
-	password: string;
+type RegisterProps = {
+	setAlert: any;
 };
 
-const Register = () => {
-	const [daftar, setDaftar] = useState<Register>({
+const Register: React.FC<RegisterProps> = ({ setAlert }) => {
+	const [daftar, setDaftar] = useState<TRegister>({
 		nama: "",
 		email: "",
 		password: "",
 	});
+
+	const navigate = useNavigate();
 
 	const handleForm = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -31,7 +34,14 @@ const Register = () => {
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		console.log(daftar);
+		RegistrasiUser(daftar)
+			.then((d) => {
+				setAlert({ type: "OPEN", msg: d.message, severity: "success" });
+			})
+			.catch((err) => {
+				setAlert({ type: "OPEN", msg: err.message, severity: "error" });
+			});
+		navigate("/auth/");
 	};
 
 	return (
@@ -56,6 +66,7 @@ const Register = () => {
 						label="Email"
 						fullWidth
 						name="email"
+						type={"email"}
 						onChange={handleForm}
 					/>
 
