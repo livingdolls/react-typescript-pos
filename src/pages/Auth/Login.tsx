@@ -1,7 +1,10 @@
 import { Box, Button, styled, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { TRegister } from "../../schema/User.schema";
+import { LoginUser } from "../../services/Auth.service";
 import { getAllKategori } from "../../services/Kategori.service";
+import { NotifyAlert } from "../../utils/Notify";
 
 const MainBox = styled(Box)({
 	backgroundColor: "#fff",
@@ -11,16 +14,13 @@ const MainBox = styled(Box)({
 	boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
 });
 
-export type Login = {
-	nama: string;
-	password: string;
-};
-
 const Login = () => {
-	const [login, setLogin] = useState<Login>({
-		nama: "",
+	const [login, setLogin] = useState<Omit<TRegister, "nama">>({
+		email: "",
 		password: "",
 	});
+
+	const navigate = useNavigate();
 
 	const handleForm = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -30,7 +30,15 @@ const Login = () => {
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		console.log(login);
+		LoginUser(login)
+			.then((d) => {
+				NotifyAlert("success", "login success!");
+				navigate("/dashboard/");
+			})
+			.catch((err) => {
+				const msg = err.response.data.message;
+				NotifyAlert("error", msg);
+			});
 	};
 
 	return (
@@ -43,9 +51,10 @@ const Login = () => {
 					<TextField
 						required
 						autoComplete="off"
-						label="Nama/Email"
+						label="Email"
 						fullWidth
-						name="nama"
+						name="email"
+						type={"email"}
 						onChange={handleForm}
 					/>
 					<TextField

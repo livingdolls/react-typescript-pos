@@ -9,3 +9,19 @@ export const RegistrasiUser = async (data: TRegister) => {
 		.then((res) => res.data);
 	return regis;
 };
+
+export const LoginUser = async (data: Omit<TRegister, "nama">) => {
+	const login = await client
+		.post(`${BASE_URL}/login/`, data, {
+			withCredentials: true,
+		})
+		.then((res) => res.data);
+	return login;
+};
+
+export const LogoutUser = async () => {
+	const logout = await client
+		.delete(`${BASE_URL}/logout/`)
+		.then((res) => res.data);
+	return logout;
+};

@@ -1,5 +1,4 @@
 import { Box, CssBaseline, styled, Typography } from "@mui/material";
-import { useReducer } from "react";
 import { Route, Routes } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import Login from "./Login";
