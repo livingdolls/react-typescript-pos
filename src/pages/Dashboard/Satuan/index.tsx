@@ -1,17 +1,16 @@
 import { Box, styled, Typography } from "@mui/material";
 import { useEffect, useReducer, useState } from "react";
 import MainModal from "../../../components/Modal";
-import { Toast } from "../../../components/Toast";
-import { AlertReducer, initilaAlert } from "../../../hooks/alert.reducer";
 import { initialGS, SatuanReducer } from "../../../hooks/getSatuan.reducer";
 import { postRSatuan, initialSP } from "../../../hooks/postSatuan.reducer";
-import { ASatuan, ISatuan, TSatuan } from "../../../schema/ISatuan";
+import { ASatuan, TSatuan } from "../../../schema/ISatuan";
 import {
 	addSatuan,
 	delSatuan,
 	editSatuan,
 	getAllSatuan,
 } from "../../../services/Satuan.service";
+import { NotifyAlert } from "../../../utils/Notify";
 import { Edit } from "./Edit";
 import FormPage from "./FormPage";
 import TablePage from "./TablePage";
@@ -26,7 +25,6 @@ const MainBox = styled(Box)({
 const Satuan = () => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [stateGet, dispatchGet] = useReducer(SatuanReducer, initialGS);
-	const [alert, dispatchAlert] = useReducer(AlertReducer, initilaAlert);
 	const [statePost, dispatchPost] = useReducer(postRSatuan, initialSP);
 	const [modal, setModal] = useState<boolean>(false);
 
@@ -56,15 +54,14 @@ const Satuan = () => {
 			.then((d) => {
 				setLoading(!loading);
 				dispatchPost({ type: "POST_SUCCESS", payload: d.message });
-				dispatchAlert({ type: "OPEN", msg: d.message });
+				NotifyAlert("success", d.message);
 				setForm({ nama: "", keterangan: "" });
 			})
 			.catch((err) => {
 				dispatchPost({ type: "POST_ERROR", payload: err.message });
+				NotifyAlert("error", err.message);
 				setLoading(!loading);
 			});
-
-		handleAlert();
 	};
 
 	const handleEdit = (form: TSatuan) => {
@@ -76,36 +73,25 @@ const Satuan = () => {
 		e.preventDefault();
 		editSatuan(patch)
 			.then((d) => {
-				dispatchAlert({ type: "OPEN", msg: d.message });
+				NotifyAlert("success", d.message);
 				setLoading(!loading);
 			})
-			.catch((err) => dispatchAlert({ type: "OPEN", msg: err.message }));
-
-		handleAlert();
+			.catch((err) => NotifyAlert("error", err.message));
 	};
 
 	const handleDelete = (id: string) => {
 		delSatuan(id)
 			.then((res) => {
-				dispatchAlert({ type: "OPEN", msg: res.message });
+				NotifyAlert("info", res.message);
 				setLoading(!loading);
 			})
-			.catch((err) => console.log(err));
-
-		handleAlert();
-	};
-
-	const handleAlert = () => {
-		setTimeout(() => {
-			dispatchAlert({ type: "CLOSE" });
-		}, 2000);
+			.catch((err) => NotifyAlert("error", err.message));
 	};
 
 	const handleModal = () => setModal(false);
 
 	return (
 		<MainBox>
-			{alert ? <Toast TToast={alert} /> : ""}
 			<Box
 				sx={{
 					width: "33%",

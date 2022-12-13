@@ -1,8 +1,7 @@
 import { Box, styled, Typography } from "@mui/material";
 import { useEffect, useReducer, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 import MainModal from "../../../components/Modal";
-import { Toast } from "../../../components/Toast";
-import { AlertReducer, initilaAlert } from "../../../hooks/alert.reducer";
 import {
 	initialPatchBarang,
 	patchBarangReducer,
@@ -14,7 +13,7 @@ import {
 	KategoriReducer,
 } from "../../../hooks/Kategori.reducer";
 import { initialPB, postRBarang } from "../../../hooks/postBarang.reducer";
-import { IBarang, TBarang } from "../../../schema/IBarng";
+import { TBarang } from "../../../schema/IBarng";
 import {
 	deleteBarangService,
 	getAllBarang,
@@ -24,6 +23,7 @@ import {
 } from "../../../services/Barang.service";
 import { getAllKategori } from "../../../services/Kategori.service";
 import { getAllSatuan } from "../../../services/Satuan.service";
+import { NotifyAlert } from "../../../utils/Notify";
 import Edit from "./Edit";
 import FormPage from "./FormPage";
 import TablePage from "./TablePage";
@@ -46,7 +46,6 @@ const Barang = () => {
 	);
 
 	const [statePost, dispatchPost] = useReducer(postRBarang, initialPB);
-	const [alert, setAlert] = useReducer(AlertReducer, initilaAlert);
 	const [statePatch, dispatchPatch] = useReducer(
 		patchBarangReducer,
 		initialPatchBarang
@@ -98,8 +97,8 @@ const Barang = () => {
 		dispatchPost({ type: "POST_START" });
 		postBarangService(data)
 			.then((d) => {
-				setAlert({ type: "OPEN", msg: d.message });
 				dispatchPost({ type: "POST_SUCCESS", payload: d.message });
+				NotifyAlert("success", d.message);
 				setRefresh(!refresh);
 				setForm({
 					nama: "",
@@ -111,27 +110,19 @@ const Barang = () => {
 			})
 			.catch((err) => {
 				dispatchPost({ type: "POST_ERROR", payload: err.message });
-				setAlert({ type: "OPEN", msg: err.message, severity: "error" });
+				NotifyAlert("error", err.message);
 			});
-
-		handleAlert();
 	};
 
 	const handleDeleteBarang = (id: string) => {
 		deleteBarangService(id)
 			.then((d) => {
-				setAlert({ type: "OPEN", msg: d.message });
+				NotifyAlert("info", d.message);
 				setRefresh(!refresh);
 			})
 			.catch((err) => {
-				setAlert({
-					type: "OPEN",
-					msg: err.message,
-					severity: "error",
-				});
+				NotifyAlert("error", err.message);
 			});
-
-		handleAlert();
 	};
 
 	const handleEditBarang = async (data: string) => {
@@ -158,20 +149,13 @@ const Barang = () => {
 		await patchBarangService(data)
 			.then((d) => {
 				dispatchPatch({ type: "PATCH_SUCCESS", payload: d.message });
-				setAlert({ type: "OPEN", msg: d.message });
+				NotifyAlert("success", d.message);
 				setRefresh(!refresh);
 			})
 			.catch((err) => {
 				dispatchPatch({ type: "PATCH_ERROR", payload: err.message });
+				NotifyAlert("error", err.message);
 			});
-
-		handleAlert();
-	};
-
-	const handleAlert = () => {
-		setTimeout(() => {
-			setAlert({ type: "CLOSE" });
-		}, 2000);
 	};
 
 	const handleModal = () => {
@@ -180,7 +164,6 @@ const Barang = () => {
 
 	return (
 		<MainBox>
-			{alert ? <Toast TToast={alert} /> : ""}
 			<Box
 				sx={{
 					width: "33%",

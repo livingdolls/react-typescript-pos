@@ -1,7 +1,6 @@
 import { Box, styled, Typography } from "@mui/material";
 import { useEffect, useReducer, useState } from "react";
 import MainModal from "../../../components/Modal";
-import { Toast } from "../../../components/Toast";
 import {
 	initialKategori,
 	KategoriReducer,
@@ -11,13 +10,13 @@ import {
 	KategoriEditReducer,
 } from "../../../hooks/KategoriEdit.reducer";
 import { IData, IForm } from "../../../schema/IKategori";
-import { IToast } from "../../../schema/Toast";
 import {
 	addKategori,
 	delKategori,
 	editKategori,
 	getAllKategori,
 } from "../../../services/Kategori.service";
+import { NotifyAlert } from "../../../utils/Notify";
 import { Edit } from "./Edit";
 import FormPage from "./FormPage";
 import TablePage from "./TabelPage";
@@ -50,11 +49,6 @@ const Kategori: React.FC = () => {
 		nama: "",
 		keterangan: "",
 	});
-	const [alert, setAlert] = useState<IToast>({
-		open: false,
-		severity: "success",
-		msg: "",
-	});
 
 	useEffect(() => {
 		dispatch({ type: "FETCH_START" });
@@ -71,15 +65,9 @@ const Kategori: React.FC = () => {
 		delKategori(id)
 			.then((res) => {
 				setAdd({ ...add, loading: false });
-				setAlert({
-					severity: "success",
-					open: true,
-					msg: res.msg,
-				});
+				NotifyAlert("info", res.msg);
 			})
-			.catch((err) => console.log(err));
-
-		handleAlert();
+			.catch((err) => NotifyAlert("error", err.message));
 	};
 
 	const handleAdd = (
@@ -89,15 +77,13 @@ const Kategori: React.FC = () => {
 		setAdd({ ...add, loading: true });
 		addKategori(form)
 			.then((res) => {
-				setAlert({ severity: "success", open: true, msg: res.message });
+				NotifyAlert("success", res.message);
 				setForm({ nama: "", keterangan: "" });
 				setAdd({ ...add, loading: false });
 			})
 			.catch((err) => {
-				setAlert({ severity: "error", open: true, msg: err });
+				NotifyAlert("error", err.message);
 			});
-
-		handleAlert();
 	};
 
 	const submitEdit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -106,14 +92,13 @@ const Kategori: React.FC = () => {
 		editKategori(edit)
 			.then((d) => {
 				dispatchEdit({ type: "FETCH_SUCCESS", payload: d.msg });
-				setAlert({ severity: "success", open: true, msg: d.msg });
+				NotifyAlert("success", d.msg);
 				setAdd({ ...add, loading: false });
 			})
-			.catch((err) =>
-				dispatchEdit({ type: "FETCH_ERROR", payload: err.message })
-			);
-
-		handleAlert();
+			.catch((err) => {
+				dispatchEdit({ type: "FETCH_ERROR", payload: err.message });
+				NotifyAlert("error", err.message);
+			});
 	};
 
 	const handleEdit = (id: IData) => {
@@ -125,15 +110,8 @@ const Kategori: React.FC = () => {
 		setOpen(false);
 	};
 
-	const handleAlert = () => {
-		setTimeout(() => {
-			setAlert({ ...alert, open: false });
-		}, 2000);
-	};
-
 	return (
 		<MainBox>
-			{alert ? <Toast TToast={alert} /> : ""}
 			<Box
 				sx={{
 					width: "33%",

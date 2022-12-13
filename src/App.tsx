@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Main from "./pages/Main";
+import Test from "./pages/Test";
 
 const themeMod = createTheme({
 	typography: {
@@ -23,6 +24,7 @@ function App() {
 			<CssBaseline />
 			<Routes>
 				<Route path="/" element={<Main />} />
+				<Route path="/test" element={<Test />} />
 				<Route path="/dashboard/*" element={<Dashboard />} />
 				<Route path="/auth/*" element={<Auth />} />
 			</Routes>

@@ -1,9 +1,9 @@
 import { Box, Button, styled, TextField, Typography } from "@mui/material";
 import { useReducer, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { AlertReducer, initilaAlert } from "../../hooks/alert.reducer";
 import { TRegister } from "../../schema/User.schema";
 import { RegistrasiUser } from "../../services/Auth.service";
+import { NotifyAlert } from "../../utils/Notify";
 
 const MainBox = styled(Box)({
 	backgroundColor: "#fff",
@@ -13,11 +13,9 @@ const MainBox = styled(Box)({
 	boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
 });
 
-type RegisterProps = {
-	setAlert: any;
-};
+type RegisterProps = {};
 
-const Register: React.FC<RegisterProps> = ({ setAlert }) => {
+const Register: React.FC<RegisterProps> = () => {
 	const [daftar, setDaftar] = useState<TRegister>({
 		nama: "",
 		email: "",
@@ -36,10 +34,10 @@ const Register: React.FC<RegisterProps> = ({ setAlert }) => {
 
 		RegistrasiUser(daftar)
 			.then((d) => {
-				setAlert({ type: "OPEN", msg: d.message, severity: "success" });
+				NotifyAlert("success", d.message);
 			})
 			.catch((err) => {
-				setAlert({ type: "OPEN", msg: err.message, severity: "error" });
+				NotifyAlert("error", err.message);
 			});
 		navigate("/auth/");
 	};
