@@ -28,7 +28,6 @@ const Layout: React.FC<layout> = ({ children }) => {
 	const handlerLogout = async () => {
 		await LogoutUser()
 			.then((d) => {
-				console.log(d);
 				NotifyAlert("info", "success logout!");
 				navigate("/auth/");
 			})

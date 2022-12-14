@@ -1,5 +1,6 @@
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthProvider";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Main from "./pages/Main";
@@ -22,12 +23,14 @@ function App() {
 	return (
 		<ThemeProvider theme={themeMod}>
 			<CssBaseline />
-			<Routes>
-				<Route path="/" element={<Main />} />
-				<Route path="/test" element={<Test />} />
-				<Route path="/dashboard/*" element={<Dashboard />} />
-				<Route path="/auth/*" element={<Auth />} />
-			</Routes>
+			<AuthProvider>
+				<Routes>
+					<Route path="/" element={<Main />} />
+					<Route path="/test" element={<Test />} />
+					<Route path="/dashboard/*" element={<Dashboard />} />
+					<Route path="/auth/*" element={<Auth />} />
+				</Routes>
+			</AuthProvider>
 		</ThemeProvider>
 	);
 }

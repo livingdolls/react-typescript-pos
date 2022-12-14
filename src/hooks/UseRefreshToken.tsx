@@ -1,15 +1,16 @@
-import { useState } from "react";
-import client from "../config/Axios";
-import { UseAuth } from "./UseAuth";
+import { useContext, useState } from "react";
+import client, { clientPrivate } from "../config/Axios";
+import AuthContext from "../context/AuthProvider";
 
 const UseRefreshToken = () => {
-	// const { setAuth } = UseAuth();
-	const [auth, setAuth] = useState({});
+	const auth = useContext(AuthContext);
 
 	const refresh = async () => {
-		const response = await client.get("/auth/token", {
-			withCredentials: true,
+		const response = await clientPrivate.get("/auth/token/");
+		auth?.setAuth((prev: any) => {
+			return { ...prev, accessToken: response.data.accessToken };
 		});
+		return response.data.accessToken;
 	};
 	return refresh;
 };

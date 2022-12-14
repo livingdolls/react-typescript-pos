@@ -21,7 +21,9 @@ export const LoginUser = async (data: Omit<TRegister, "nama">) => {
 
 export const LogoutUser = async () => {
 	const logout = await client
-		.delete(`${BASE_URL}/logout/`)
+		.delete(`${BASE_URL}/logout/`, {
+			withCredentials: true,
+		})
 		.then((res) => res.data);
 	return logout;
 };
