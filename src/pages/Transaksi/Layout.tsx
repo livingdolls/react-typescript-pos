@@ -1,6 +1,7 @@
 import { Box, styled } from "@mui/material";
-import { useEffect, useReducer, useState } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import { Toast } from "../../components/Toast";
+import AuthContext from "../../context/AuthProvider";
 import { initialTransaksi, transaksiCart } from "../../hooks/Transaksi.reducer";
 import { IToast } from "../../schema/Toast";
 import { TCart, TMtransaksi } from "../../schema/Transaksi.schema";
@@ -25,6 +26,7 @@ const BoxBody = styled(Box)({
 });
 
 const Layout = () => {
+	const auth = useContext(AuthContext);
 	const [stateCart, dispatchCart] = useReducer(
 		transaksiCart,
 		initialTransaksi

@@ -1,11 +1,12 @@
 import client from "../config/Axios";
+import priv from "../config/Interceptor";
 import { TBarang } from "../schema/IBarng";
 
 const BASE_URL = "/barang/";
 
 export const getAllBarang = async () => {
 	try {
-		const get = await client.get(BASE_URL).then((res) => res.data);
+		const get = await priv.get(BASE_URL).then((res) => res.data);
 		return get;
 	} catch (error: any) {
 		throw new Error(error);

@@ -1,6 +1,7 @@
 import { Box, Button, styled, TextField, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import AuthContext from "../../context/AuthProvider";
 import { TRegister } from "../../schema/User.schema";
 import { LoginUser } from "../../services/Auth.service";
 import { getAllKategori } from "../../services/Kategori.service";
@@ -20,6 +21,8 @@ const Login = () => {
 		password: "",
 	});
 
+	const auths = useContext(AuthContext);
+
 	const navigate = useNavigate();
 
 	const handleForm = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,6 +37,8 @@ const Login = () => {
 			.then((d) => {
 				NotifyAlert("success", "login success!");
 				navigate("/dashboard/");
+				console.log(d);
+				auths?.setAuth(d.accessToken);
 			})
 			.catch((err) => {
 				const msg = err.response.data.message;

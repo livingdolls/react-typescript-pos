@@ -5,6 +5,7 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Main from "./pages/Main";
 import Test from "./pages/Test";
+import PrivateRoute from "./utils/PrivateRoute";
 
 const themeMod = createTheme({
 	typography: {
@@ -25,9 +26,11 @@ function App() {
 			<CssBaseline />
 			<AuthProvider>
 				<Routes>
-					<Route path="/" element={<Main />} />
+					<Route element={<PrivateRoute />}>
+						<Route path="/dashboard/*" element={<Dashboard />} />
+						<Route path="/" element={<Main />} />
+					</Route>
 					<Route path="/test" element={<Test />} />
-					<Route path="/dashboard/*" element={<Dashboard />} />
 					<Route path="/auth/*" element={<Auth />} />
 				</Routes>
 			</AuthProvider>
