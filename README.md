@@ -1,4 +1,4 @@
-# Twitter UI Clone
+# Point Of Sale
 
 Sistem E-Kasir atau disebut juga dengan Point Of Sale
 
